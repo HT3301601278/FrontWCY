@@ -29,6 +29,7 @@
 <script>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { ElMessage } from 'element-plus';
 
 export default {
   name: 'Register',
@@ -40,7 +41,7 @@ export default {
 
     const register = async () => {
       if (password.value !== confirmPassword.value) {
-        alert('两次输入的密码不一致');
+        ElMessage.error('两次输入的密码不一致');
         return;
       }
       try {
@@ -50,14 +51,15 @@ export default {
         if (response.ok) {
           const data = await response.json();
           console.log('注册成功:', data);
-          alert('注册成功，请登录');
+          ElMessage.success('注册成功，请登录');
           router.push('/login');
         } else {
-          alert('注册失败，请重试');
+          const errorData = await response.json();
+          ElMessage.error(errorData.message || '注册失败，请重试');
         }
       } catch (error) {
         console.error('注册错误:', error);
-        alert('注册出错，请稍后重试');
+        ElMessage.error('注册出错，请稍后重试');
       }
     };
 

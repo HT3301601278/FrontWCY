@@ -26,6 +26,7 @@
 <script>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { ElMessage } from 'element-plus';
 
 export default {
   name: 'Login',
@@ -45,11 +46,12 @@ export default {
           localStorage.setItem('user', JSON.stringify(data));
           router.push('/dashboard');
         } else {
-          alert('登录失败，请检查用户名和密码');
+          const errorData = await response.json();
+          ElMessage.error(errorData.message || '登录失败，请检查用户名和密码');
         }
       } catch (error) {
         console.error('登录错误:', error);
-        alert('登录出错，请稍后重试');
+        ElMessage.error('登录出错，请稍后重试');
       }
     };
 
